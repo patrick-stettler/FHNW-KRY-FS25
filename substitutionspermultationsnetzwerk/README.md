@@ -5,13 +5,15 @@ Gegeben sei das SPN mit folgenden Parametern:
 Anzahl der Runden: r = 4  
 Anzahl der Bits pro Subblock: n = 4  
 Anzahl der Subblocks pro Block: m = 4  
+Schlüssel: k = 0011 1010 1001 0100 1101 0110 0011 1111
 Schlüssellänge in Bits: s = 32  
 
 Rundenschlüssel:
 - i = 0: die 16 aufeinanderfolgenden Bits ab Position 4 x 0 = 0
-- i = 1: die 16 aufeinanderfolgenden Bits ab Position 4 x 1 = 1
+- i = 1: die 16 aufeinanderfolgenden Bits ab Position 4 x 1 = 4
 - i = 2: die 16 aufeinanderfolgenden Bits ab Position 4 x 2 = 8
 - i = 3: die 16 aufeinanderfolgenden Bits ab Position 4 x 3 = 12
+- i = 4: die 16 aufeinanderfolgenden Bits ab Position 4 x 4 = 16
 
 S-Box:
 ![S-Box](sbox.png)
@@ -22,7 +24,7 @@ Der Bitstring 0010 entspricht etwa 2 und wird auf D abgebildet, was 1101 entspri
 Bitpermutation:
 ![Bitpermutation](bitpermutation.png)
 
-Alice und Bob verwenden obiges SPN im CTR-Modus mit dem Schlüssel 0011 1010 1001 0100 1101 0110 0011 1111 um sich verschlüsselt Texte zuzusenden. Dabei wird ein Text zunächst ASCII kodiert. An den zugehörigen Bitstring wird eine 1 drangehängt und dann so viele Nullen, bis die Gesamtlänge des Bitstrings durch 16 teilbar ist. Dieser resultierende Bitstring wird dann im CTR-Modus verschlüsselt.
+Alice und Bob verwenden obiges SPN im CTR-Modus mit dem Schlüssel 0011 1010 1001 0100 1101 0110 0011 1111 um sich verschlüsselte Texte zuzusenden. Dabei wird ein Text zunächst ASCII kodiert. An den zugehörigen Bitstring wird eine 1 drangehängt und dann so viele Nullen, bis die Gesamtlänge des Bitstrings durch 16 teilbar ist. Dieser resultierende Bitstring wird dann im CTR-Modus verschlüsselt.
 
 Bob empfängt den folgenden Chiffretext - wie lautet die zugehörige Nachricht?
 00000100110100100000101110111000000000101000111110001110011111110110000001010001010000111010000000010011011001110010101110110000
