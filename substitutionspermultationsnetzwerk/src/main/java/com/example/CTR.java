@@ -49,4 +49,15 @@ public class CTR implements Verschluesselungmodus{
         return String.format("%" + BLOCKSIZE + "s", Integer.toBinaryString(result)).replace(' ', '0');
     }
 
+
+    // Getter-Methoden
+
+    public Blockkryptosystem getKRYPTOSYSTEM(){
+        return this.KRYPTOSYSTEM;
+    }
+
+    public int getBLOCKSIZE(){
+        return this.BLOCKSIZE;
+    }
+
 }

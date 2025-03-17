@@ -135,35 +135,35 @@ public class SPN implements Blockkryptosystem {
     // Getter-Methoden
 
     public int getR(){
-        return R;
+        return this.R;
     }
 
     public int getM(){
-        return M;
+        return this.M;
     }
 
     public int getN(){
-        return N;
+        return this.N;
     }
 
     public String getK(){
-        return K;
+        return this.K;
     }
 
     public int[] getSBOX(){
-        return SBOX;
+        return this.SBOX;
     }
 
     public int[] getSINV(){
-        return SINV;
+        return this.SINV;
     }
 
     public int[] getBETA(){
-        return BETA;
+        return this.BETA;
     }
 
     public int getBLOCKSIZE(){
-        return BLOCKSIZE;
+        return this.BLOCKSIZE;
     }
 
 }

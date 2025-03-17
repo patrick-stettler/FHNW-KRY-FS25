@@ -21,6 +21,7 @@ public class App {
        
     }
 
+    
     // ASCII-Umwandlung
     
     private static String binaryToASCII(String binary) {
