@@ -1,5 +1,7 @@
 package com.example;
 
+import java.nio.charset.StandardCharsets;
+
 public class App {
 
     // Substitutionspermultationsnetzwerk
@@ -16,6 +18,11 @@ public class App {
 
     public static void main(String[] args) {
         String ciphertext = "00000100110100100000101110111000000000101000111110001110011111110110000001010001010000111010000000010011011001110010101110110000";
+        String plaintext = decryptCTR(ciphertext);
+
+        System.out.println("Entschlüsselung (Bitstring): " + plaintext);
+        System.out.println("Entschlüsselung (Bitstring ohne Padding): " + removePadding(plaintext));
+        System.out.println("Entschlüsselung (Klartext): " + binaryToASCII(removePadding(plaintext)));
     }
 
 
@@ -39,25 +46,25 @@ public class App {
     }
 
 
-    private static String decryptSPN(String ciphertext) {
-        String x = ciphertext;
+    public String decryptSPN(String ciphertext) {
+        String x = "";
 
         // Initialer Rundenschlüssel
-        x = xor(x, getRoundKey(R));
-        x = substitute(x, SINV);
+        x = xor(ciphertext, getRoundKey(R));
         
         // reguläre Runden
-        for (int i = R - 1; i >= 1; i--) {
-            x = xor(x, getRoundKey(i));
-            x = permute(x, true);
+        for (int i = R-1; i > 0; i--) {
             x = substitute(x, SINV);
+            x = permute(x, true);
+            x = xor(x, permute(getRoundKey(i), false));
         }
         
         // verkürzte Runde
+        x = substitute(x, SINV);
         x = xor(x, getRoundKey(0));
         return x;
     }
- 
+
 
     private static String substitute(String state, int[] sx) {
         StringBuilder substituted = new StringBuilder();
@@ -87,7 +94,7 @@ public class App {
 
     private static String xor(String a, String b) {
         int result = Integer.parseInt(a, 2) ^ Integer.parseInt(b, 2);
-        return String.format("%" + (N * M) + "s", Integer.toBinaryString(result)).replace(' ', '0');
+        return String.format("%" + BLOCKSIZE + "s", Integer.toBinaryString(result)).replace(' ', '0');
     }
 
 
@@ -95,7 +102,41 @@ public class App {
         if(round > R){
             throw new IllegalArgumentException("unzulässige Rundenzahl");
         }
-        return K.substring(round * N, round * N + (N*M));
+        return K.substring(round * N, round * N + BLOCKSIZE);
+    }
+
+
+    private static String decryptCTR(String ciphertext) {
+        String plaintext = "";
+        String nonce = ciphertext.substring(0, BLOCKSIZE);
+        
+        for (int i = 1; i < ciphertext.length() / BLOCKSIZE; i++) {
+            int counter = i-1;
+            int result = (int) (Integer.parseInt(nonce, 2) + counter % Math.pow(2, BLOCKSIZE));
+            String blockchiffre = String.format("%" + BLOCKSIZE + "s", Integer.toBinaryString(result)).replace(' ', '0');
+            String stromchiffre = encryptSPN(blockchiffre);
+            String yi = ciphertext.substring(i * BLOCKSIZE, (i+1) * BLOCKSIZE);
+            plaintext += xor(yi, stromchiffre);
+        }
+
+        return plaintext;
+    }
+ 
+
+    private static String removePadding(String bitstring) {
+        return bitstring.substring(0, bitstring.lastIndexOf('1'));
+    }
+
+    
+    private static String binaryToASCII(String binary) {
+        String text = "";
+        
+        for (int i = 0; i < binary.length(); i += 8) {
+            int charCode = Integer.parseInt(binary.substring(i, Math.min(i + 8, binary.length())), 2);
+            text += ((char) charCode);
+        }
+
+        return text;
     }
 
 }
