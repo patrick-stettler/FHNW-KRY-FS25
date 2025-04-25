@@ -17,3 +17,6 @@ Thumbs.db    # Windows
 # Temporäre Dateien
 *.swp
 *.swo
+
+# Projekt-spezifische Dateien
+rainbow_table.txt
